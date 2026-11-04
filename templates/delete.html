@@ -1,0 +1,12 @@
+{%extends 'base.html'%}
+<head>
+    <meta charset="UTF-8">
+    <title>delete Movie</title>
+</head>
+{%block body%}
+<form action="" method="post" enctype="multipart/form-data">
+    {%csrf_token%}
+    Are you sure want to delete ?
+    <input type="submit">
+</form>
+{%endblock %}
