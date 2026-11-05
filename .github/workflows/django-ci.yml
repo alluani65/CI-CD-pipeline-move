@@ -1,5 +1,5 @@
 
-name: Django CI Pipeline
+name: Django CI/CD Pipeline
 
 on:
   push:
@@ -11,32 +11,70 @@ on:
       - main
 
 jobs:
+
+  # JOB 1: Django Testing
   test:
     name: Django Automated Testing
-
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout source code
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Step 2: Setup Python
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      # Step 3: Install dependencies
       - name: Install Requirements
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # Step 4: Check Django configuration
       - name: Django System Check
         run: python manage.py check
 
-      # Step 5: Run automated tests
       - name: Run Django Tests
         run: python manage.py test
+
+
+  # JOB 2: Build and Push Docker Image
+  docker:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+
+    needs: test
+
+    # Run Docker push only after a successful push to main
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extract Docker Metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/django-movie-cicd
+          tags: |
+            type=raw,value=latest
+            type=sha,prefix=
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
