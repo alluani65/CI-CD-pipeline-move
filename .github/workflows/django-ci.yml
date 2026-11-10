@@ -96,4 +96,4 @@ jobs:
             docker pull adminadmin2/django-movie-cicd:latest
             docker stop movie-app || true
             docker rm movie-app || true
-            docker run -d --name movie-app -p 8000:8000 --env-file /home/ubuntu/.env adminadmin2/django-movie-cicd:latest
+            docker run -d \--name movie-app \--restart unless-stopped \--env-file /opt/movie-app/.env \-p 8000:8000 \adminadmin2/django-movie-cicd:latest
