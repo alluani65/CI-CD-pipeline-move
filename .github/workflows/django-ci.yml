@@ -78,3 +78,22 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+# JOB 3: Deploy to AWS EC2
+  deploy:
+    name: Deploy to EC2
+    runs-on: ubuntu-latest
+    needs: docker # This ensures it only deploys if the build is successful
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: SSH and Restart Docker Container
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            docker pull adminadmin2/django-movie-cicd:latest
+            docker stop movie-app || true
+            docker rm movie-app || true
+            docker run -d --name movie-app -p 8000:8000 --env-file /home/ubuntu/.env adminadmin2/django-movie-cicd:latest
