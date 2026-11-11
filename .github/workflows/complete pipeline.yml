@@ -78,7 +78,11 @@ jobs:
   deploy:
     name: Deploy to EC2
     runs-on: ubuntu-latest
+<<<<<<< HEAD:.github/workflows/complete pipeline.yml
     needs: docker
+=======
+    needs: docker # This ensures it only deploys if the build is successful
+>>>>>>> parent of 4859caf (automate testing again):.github/workflows/django-ci.yml
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - name: SSH and Restart Docker Container
@@ -88,17 +92,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            # 1. Pull the newest image
             docker pull adminadmin2/django-movie-cicd:latest
-            
-            # 2. Stop and remove the old container (ignoring errors if it doesn't exist)
             docker stop movie-app || true
             docker rm movie-app || true
-            
-            # 3. Run the new container with your verified command
-            docker run -d \
-              --name movie-app \
-              --restart unless-stopped \
-              --env-file /opt/movie-app/.env \
-              -p 8000:8000 \
-              adminadmin2/django-movie-cicd:latest
+            docker run -d \--name movie-app \--restart unless-stopped \--env-file /opt/movie-app/.env \-p 8000:8000 \adminadmin2/django-movie-cicd:latest
