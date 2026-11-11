@@ -1,12 +1,18 @@
-# ... (keep your on: push/pull_request triggers the same) ...
+name: Django CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-
   # JOB 1: Django Testing
   test:
     name: Django Automated Testing
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -31,17 +37,12 @@ jobs:
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
-
   # JOB 2: Build and Push Docker Image
   docker:
     name: Build and Push Docker Image
     runs-on: ubuntu-latest
-
     needs: test
-
-    # Run Docker push only after a successful push to main
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -72,15 +73,13 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-# JOB 3: Deploy to AWS EC2
+
+  # JOB 3: Deploy to AWS EC2
   deploy:
     name: Deploy to EC2
     runs-on: ubuntu-latest
     needs: docker
-    
-    # Run deployment only after a successful push to main
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-
     steps:
       - name: SSH and Restart Docker Container
         uses: appleboy/ssh-action@v1.0.3
