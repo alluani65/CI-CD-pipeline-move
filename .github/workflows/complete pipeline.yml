@@ -1,14 +1,4 @@
-
-name: Django CI/CD Pipeline
-
-on:
-  push:
-    branches:
-      - main
-
-  pull_request:
-    branches:
-      - main
+# ... (keep your on: push/pull_request triggers the same) ...
 
 jobs:
 
@@ -33,9 +23,13 @@ jobs:
 
       - name: Django System Check
         run: python manage.py check
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
       - name: Run Django Tests
         run: python manage.py test
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
 
   # JOB 2: Build and Push Docker Image
