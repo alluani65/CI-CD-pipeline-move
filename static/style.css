@@ -1,2 +1,51 @@
-body {background-color:palegreen;
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #121212 !important; /* Deep cinematic black */
+}
+
+/* Movie Card Styling */
+.card {
+    background-color: #1e1e1e;
+    border: 1px solid #333;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.7);
+    border-color: #f5c518;
+}
+
+.card-title {
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1.1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-text {
+    color: #a0a0a0;
+    font-size: 0.9rem;
+}
+
+/* IMDb style buttons */
+.btn-warning {
+    background-color: #f5c518;
+    color: #000;
+    border: none;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.btn-warning:hover {
+    background-color: #e0b315;
+    color: #000;
+}
+
+.btn-danger {
+    font-weight: 600;
 }

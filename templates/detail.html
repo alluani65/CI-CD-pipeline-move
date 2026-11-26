@@ -1,21 +1,42 @@
-{% extends 'base.html'%}
-{% block body%}
-<div class="container">
-    <div class="row">
-        <div class="col-md-6">
-            <br>
-<img src="{{movie.img.url}}" width="350" height="350">
+{% extends 'base.html' %}
+
+{% block title %}{{ movie.name }} - Movies Hub{% endblock %}
+
+{% block body %}
+<div class="container mt-5 mb-5">
+    <div class="row p-4 rounded shadow-lg" style="background-color: #1e1e1e; border: 1px solid #333;">
+        
+        <!-- Movie Poster Column -->
+        <div class="col-md-4 text-center text-md-left mb-4 mb-md-0">
+            <!-- Used img-fluid for responsiveness instead of hardcoded 350x350 -->
+            <img src="{{ movie.img.url }}" alt="{{ movie.name }} Poster" class="img-fluid rounded shadow" style="max-height: 500px; width: 100%; object-fit: cover; border: 1px solid #444;">
         </div>
-    </div>
-        <div class="col-md-6">
-        <h1>{{movie.name}}</h1><br>
-        <h2>{{movie.des}}</h2><br>
-        <h2>{{movie.year}}</h2><br>
-<a class="btn btn-warning" href="{%url 'movieapp:update' movie.id%}">update</a>
-<a class="btn btn-warning" href="{%url 'movieapp:delete' movie.id%}">delete</a>
+
+        <!-- Movie Details Column -->
+        <div class="col-md-8 d-flex flex-column">
+            
+            <!-- Title and Year -->
+            <h1 class="font-weight-bold text-warning mb-1" style="font-size: 2.5rem;">{{ movie.name }}</h1>
+            <h5 class="text-muted mb-4">Released: <span class="text-light">{{ movie.year }}</span></h5>
+            
+            <!-- Description (Changed from h2 to normal text for better readability) -->
+            <div class="text-light mb-5" style="font-size: 1.15rem; line-height: 1.7;">
+                {{ movie.des }}
+            </div>
+
+            <!-- Action Buttons pushed to the bottom -->
+            <div class="mt-auto pt-3" style="border-top: 1px solid #333;">
+                <a href="{% url 'movieapp:update' movie.id %}" class="btn btn-warning font-weight-bold px-4 mr-3">
+                    Update Movie
+                </a>
+                <!-- Changed Delete button to btn-danger (red) for semantic accuracy -->
+                <a href="{% url 'movieapp:delete' movie.id %}" class="btn btn-danger font-weight-bold px-4">
+                    Delete Movie
+                </a>
+            </div>
+
         </div>
+        
     </div>
 </div>
-
-{%endblock%}
-
+{% endblock %}

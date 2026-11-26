@@ -1,18 +1,44 @@
-{% extends 'base.html'%}
-{% block body%}
-<div class="container">
-    <div class="row">
-        {%for i in movie %}
-    <div class="card mt-3 mr-3" style="width: 18rem;" >
-  <img src="{{i.img.url}}" class="card-img-top" alt="..."width="250" height="250">
-  <div class="card-body">
-    <h5 class="card-title">{{i.name}}</h5>
-    <p class="card-text">{{i.des}}</p>
-    <a href="{%url 'movieapp:detail' i.id %}" class="btn btn-primary">{{i.name}}</a>
-  </div>
-</div>
-    {%endfor%}
-</div>
-</div>
+{% extends 'base.html' %}
 
-{%endblock%}
+{% block title %}Home - Movies Hub{% endblock %}
+
+{% block body %}
+<div class="container mt-4 mb-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="font-weight-bold border-bottom border-secondary pb-2 text-warning">Latest Releases</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for i in movie %}
+        <!-- Responsive grid columns -->
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4 d-flex align-items-stretch">
+            <div class="card w-100 shadow-sm" style="background-color: #1e1e1e; border: 1px solid #333;">
+                
+                <!-- Uniform image sizing with object-fit -->
+                <img src="{{ i.img.url }}" class="card-img-top" alt="{{ i.name }}" style="height: 350px; object-fit: cover; border-bottom: 1px solid #333;">
+                
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title text-white font-weight-bold text-truncate" title="{{ i.name }}">{{ i.name }}</h5>
+                    
+                    <!-- Line clamping to keep descriptions from breaking card heights -->
+                    <p class="card-text text-muted mb-4" style="font-size: 0.9rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                        {{ i.des }}
+                    </p>
+                    
+                    <!-- Button anchored to the bottom -->
+                    <div class="mt-auto">
+                        <a href="{% url 'movieapp:detail' i.id %}" class="btn btn-warning btn-block font-weight-bold">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center mt-5">
+            <h4 class="text-muted">No movies found. Add your first movie!</h4>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

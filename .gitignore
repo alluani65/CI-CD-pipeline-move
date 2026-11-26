@@ -9,4 +9,13 @@ __pycache__/
 # Database
 db.sqlite3
 
-#
+# Terraform
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.backup
+terraform/.terraform.lock.hcl
+terraform/*.tfvars
+
+# Ansible & SSH Keys
+ansible/inventory.ini
+*.pem

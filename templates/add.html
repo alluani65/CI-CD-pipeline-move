@@ -1,12 +1,43 @@
-{%extends 'base.html'%}
-{%block body%}
-<form action="" method="post" enctype="multipart/form-data">
-    {%csrf_token%}
-    <input type="text" name="name" placeholder="Enter Movie name">
-    <input type="text" name="des" placeholder="Enter Movie description">
-    <input type="number" name="year" placeholder="Enter year of release">
-    <input type="file" name="img">
-    <input type="submit">
+{% extends 'base.html' %}
 
-</form>
-{%endblock%}
+{% block title %}Add Movie - Movies Hub{% endblock %}
+
+{% block body %}
+<div class="row justify-content-center mt-5 mb-5">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-lg" style="background-color: #1e1e1e; border-color: #333;">
+            <div class="card-header text-center" style="border-bottom: 1px solid #333;">
+                <h3 class="font-weight-bold text-warning mb-0">Add a New Movie</h3>
+            </div>
+            <div class="card-body p-4">
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label for="name" class="text-light font-weight-bold">Movie Title</label>
+                        <input type="text" name="name" id="name" class="form-control text-white" style="background-color: #121212; border: 1px solid #444;" placeholder="Enter movie name" required>
+                    </div>
+                    
+                    <div class="form-group mt-3">
+                        <label for="des" class="text-light font-weight-bold">Description</label>
+                        <!-- Using textarea instead of input for the TextField -->
+                        <textarea name="des" id="des" class="form-control text-white" style="background-color: #121212; border: 1px solid #444;" rows="4" placeholder="Enter movie description" required></textarea>
+                    </div>
+                    
+                    <div class="form-group mt-3">
+                        <label for="year" class="text-light font-weight-bold">Release Year</label>
+                        <input type="number" name="year" id="year" class="form-control text-white" style="background-color: #121212; border: 1px solid #444;" placeholder="e.g., 2026" required>
+                    </div>
+                    
+                    <div class="form-group mt-4 p-3 rounded" style="background-color: #121212; border: 1px dashed #555;">
+                        <label for="img" class="text-light font-weight-bold d-block">Movie Poster</label>
+                        <input type="file" name="img" id="img" class="form-control-file text-muted" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-warning btn-block font-weight-bold mt-4 py-2" style="font-size: 1.1rem;">Save Movie</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
